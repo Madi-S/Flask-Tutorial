@@ -1,10 +1,11 @@
 from app import app
-
+from flask import render_template
 
 
 # {'/':'index', '/blog': 'index'}
 @app.route('/')
 @app.route('/blog')
 def index():
-    return '<h2>Hello World</h2>'
+    my_name = 'Madi'
+    return render_template('index.html', name=my_name)
 
