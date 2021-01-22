@@ -1,3 +1,4 @@
+import view
 from app import app
 
 
