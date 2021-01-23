@@ -3,7 +3,7 @@ from flask import render_template
 
 
 posts = Blueprint('posts', __name__, template_folder='templates')
-
+# the name 'posts' will be used in url_for function
 
 @posts.route('/')
 def index():
