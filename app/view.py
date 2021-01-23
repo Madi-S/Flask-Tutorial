@@ -1,4 +1,5 @@
 from app import app
+from models import Post
 from flask import render_template
 
 
@@ -6,5 +7,5 @@ from flask import render_template
 @app.route('/')
 def index():
     my_name = 'Madi'
-    return render_template('index.html', name=my_name)
+    return render_template('index.html', title=Post.query.all())
 
