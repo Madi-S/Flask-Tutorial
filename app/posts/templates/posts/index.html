@@ -5,9 +5,15 @@
 {% endblock %}
 
 {% block content_title %}
-    Blueprint index content title
+    Posts
 {% endblock %}
 
 {% block content %}
-    Blueprint index content
+    {% for post in posts %}
+
+        <p>
+            {{ post.title }}
+        </p>
+
+    {% endfor %}
 {% endblock %}
