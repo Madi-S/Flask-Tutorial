@@ -13,10 +13,10 @@ class Post(db.Model):
 
     def __init__(self, *args, **kwargs):
         super(Post, self).__init__(*args, **kwargs)
-        self.slug = generate_slug(self.slug)
+        self.slug = self.generate_slug(self.slug)
 
     @staticmethod
-    def slugify(s):
+    def generate_slug(s):
         pattern = r'[^\w+]'
         return re.sub(pattern, '-', s)
         # return s.replace(' ','-')
