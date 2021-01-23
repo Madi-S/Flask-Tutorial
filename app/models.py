@@ -4,11 +4,6 @@ from datetime import datetime
 
 
 
-def slugify(s):
-    pattern = r'[^\w+]'
-    return re.sub(pattern, '-', s)
-    # return s.replace(' ','-')
-
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
@@ -18,12 +13,13 @@ class Post(db.Model):
 
     def __init__(self, *args, **kwargs):
         super(Post, self).__init__(*args, **kwargs)
-        self.slug = self.generate_slug(self.slug)
+        self.slug = generate_slug(self.slug)
 
-
-    def generate_slug(self):
-        if self.title:
-            return slugify(self.title) # generating slug (unique url part)
+    @staticmethod
+    def slugify(s):
+        pattern = r'[^\w+]'
+        return re.sub(pattern, '-', s)
+        # return s.replace(' ','-')
 
 
     def __repr__(self):
