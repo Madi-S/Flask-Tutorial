@@ -5,6 +5,15 @@ from random import randint
 
 
 
+post_tags = db.Table('post_tags',
+    db.Column('post_id', db.Integer, db.ForeignKey('post.id')),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'))
+ )
+
+
+
+
+
 def generate_slug(s):
     pattern = r'[^\w+]'
     return re.sub(pattern, '-', s).lower() + str(randint(1000, 9999))
@@ -22,6 +31,8 @@ class Post(db.Model):
         super(Post, self).__init__(*args, **kwargs)
         self.slug = generate_slug(self.title)
 
+    tags = db.relationship('Tag', secondary=post_tags, backref=db.backref('posts', lazy='dynamic'))
+
     def __repr__(self):
         return f'<Post id: {self.id}, title: {self.title}>'
 
@@ -37,4 +48,8 @@ class Tag(db.Model):
         self.slug = generate_slug(self.name)
 
     def __repr__(self):
-        return f'<Tag id {self.id}, name {self.name}>'
+        return f'<Tag id: {self.id}, name: {self.name}>'
+
+# t = Tag.query.first()
+# p1 = Post.query.filter(Post.id==1).first()
+# p1.tags.append(t)
