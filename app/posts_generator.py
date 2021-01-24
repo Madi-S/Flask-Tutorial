@@ -10,11 +10,12 @@ def get_posts(limit, q):
     for headline in top_headlines:
         articles.append({
             'title': headline['title'],
-            'body': headline['content'],
-            'created': headline['publishedAt']
+            'body': headline['content']
         })
     return articles
 
 
 if __name__ == '__main__':
-    print(get_posts(limit=1, q='Chelsea'))
+    posts = get_posts(limit=20, q=None)
+    for p in posts:
+        print(len(p['title']))

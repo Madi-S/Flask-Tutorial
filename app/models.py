@@ -6,8 +6,8 @@ from random import randint
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100))
-    slug = db.Column(db.String(140), unique=True)
+    title = db.Column(db.String(300))
+    slug = db.Column(db.String(300), unique=True)
     body = db.Column(db.Text)
     created = db.Column(db.DateTime, default=datetime.now())
 
