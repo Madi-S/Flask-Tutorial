@@ -2,7 +2,8 @@ import requests
 from newsapi import NewsApiClient
 from config import news_key
 
-def get_posts(limit,q):
+
+def get_posts(limit, q):
     newsapi = NewsApiClient(api_key=news_key)
     top_headlines = newsapi.get_top_headlines(q=q)['articles'][:limit]
     articles = []
@@ -10,7 +11,7 @@ def get_posts(limit,q):
         articles.append({
             'title': headline['title'],
             'body': headline['content'],
-            'created':headline['publishedAt']
+            'created': headline['publishedAt']
         })
     return articles
 

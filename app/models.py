@@ -22,6 +22,5 @@ class Post(db.Model):
             return re.sub(pattern, '-', s).lower()
             # return s.replace(' ','-')
 
-
     def __repr__(self):
         return f'<Post id: {self.id}, title: {self.title}>'
