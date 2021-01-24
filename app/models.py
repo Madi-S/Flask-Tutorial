@@ -1,7 +1,7 @@
 import re
 from app import db
 from datetime import datetime
-
+from random import randint
 
 
 class Post(db.Model):
@@ -16,10 +16,10 @@ class Post(db.Model):
         self.slug = self.generate_slug(self.title)
 
     @staticmethod
-    def generate_slug(s):
-        if s:
+    def generate_slug(title):
+        if title:
             pattern = r'[^\w+]'
-            return re.sub(pattern, '-', s).lower()
+            return re.sub(pattern, '-', title).lower() + str(randint(1000, 9999))
             # return s.replace(' ','-')
 
 
