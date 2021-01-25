@@ -16,14 +16,23 @@ posts = Blueprint('posts', __name__, template_folder='templates')
 
 
 @posts.route('/search')
-def search():
+def search(): 
     q = request.args.get('q')
     if q:
-        posts = Post.query.filter(Post.title.contains(q) | Post.body.contains(q)).all()
+        posts = Post.query.filter(Post.title.contains(q) | Post.body.contains(q))
     else:
-        posts = Post.query.all()
+        posts = Post.query
     
-    return render_template('posts/index.html', posts=posts)
+    page = request.args.get('page')
+    if page and page.isdigit():
+        page = int(page)
+    else:
+        page = 1
+
+    pages = posts.paginate(page=page, per_page=10)
+
+
+    return render_template('posts/index.html', posts=posts, pages=pages)
 
 
 # Must be above than `index` because it will cosnider `create` as `q` parameter
@@ -53,9 +62,18 @@ def create_post():
 
 @posts.route('/')
 def index():
+    page = request.args.get('page')
+
+    if page and page.isdigit():
+        page = int(page)
+    else:
+        page = 1
+
     posts = Post.query.order_by(Post.created.desc())
-    
-    return render_template('posts/index.html', posts=posts)
+    pages = posts.paginate(page=page, per_page=10)
+
+
+    return render_template('posts/index.html', posts=posts, pages=pages)
 
 
 # http://localhost:5000/blog/first-post
