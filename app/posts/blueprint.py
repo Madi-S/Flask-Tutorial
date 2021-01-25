@@ -57,7 +57,7 @@ def index():
     else:
         page = 1
 
-    pages = posts.paginate(page=page, per_page=10)
+    pages = posts.paginate(page=page, per_page=1)
 
 
     return render_template('posts/index.html', pages=pages, q=q)
