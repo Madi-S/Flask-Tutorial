@@ -1,7 +1,10 @@
 from flask import Blueprint
 from flask import request
 from flask import render_template
+
 from models import Post, Tag
+from app import app
+
 from .forms import PostForm
 
 
@@ -21,13 +24,20 @@ def create_post():
 
 
 
-@posts.route('/')
-def index():
+@app.route('/search')
+def search():
     q = request.args.get('q')
     if q:
         posts = Post.query.filter(Post.title.contains(q) | Post.body.contains(q)).all()
     else:
         posts = Post.query.all()
+    
+    return render_template('posts/index.html', posts=posts)
+
+
+@posts.route('/search')
+def index():
+    posts = Post.query.all()
     
     return render_template('posts/index.html', posts=posts)
 
