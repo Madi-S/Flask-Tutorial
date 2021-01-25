@@ -11,9 +11,6 @@ post_tags = db.Table('post_tags',
  )
 
 
-
-
-
 def generate_slug(s):
     pattern = r'[^\w+]'
     return re.sub(pattern, '-', s).lower() + str(randint(1000, 9999))
