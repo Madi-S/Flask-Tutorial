@@ -30,27 +30,30 @@ def search():
 # http://localhost:5000/blog/create
 @posts.route('/create', methods=['POST','GET'])
 def create_post():
+    form = PostForm(meta={'csrf': False})
+
     if request.method == 'POST':
-        title = request.form.get('title')
-        body = request.form.get('body')
+        if form.validate_on_submit():
+            title = request.form.get('title')
+            body = request.form.get('body')
 
-        try:
-            post = Post(title=title, body=body)
-            db.session.add(post)
-            db.session.commit()
-        except Exception as e:
-            print('Error:', e)           
+            try:
+                post = Post(title=title, body=body)
+                db.session.add(post)
+                db.session.commit()
+            except Exception as e:
+                print('Error:', e)           
 
-        return redirect(url_for('posts.index'))
+            return redirect(url_for('posts.index'))
+        else:
+            print('Form did not pass validation')
 
-
-    form = PostForm()
     return render_template('posts/create_post.html', form=form)
 
 
 @posts.route('/')
 def index():
-    posts = Post.query.all()[::-1]
+    posts = Post.query.order_by(Post.created.desc())
     
     return render_template('posts/index.html', posts=posts)
 
@@ -70,5 +73,3 @@ def tag_detail(slug):
     tag = Tag.query.filter(Tag.slug==slug).first()
     posts = tag.posts #.all()
     return render_template('posts/tag_detail.html',tag=tag, posts=posts)
-
-
