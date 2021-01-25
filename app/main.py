@@ -1,4 +1,3 @@
-import view
 from app import app, db
 from posts.blueprint import posts
 from fill_db import fill_posts

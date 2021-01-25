@@ -1,15 +1,21 @@
 from flask import Blueprint
 from flask import request
+from flask import redirect
+from flask import url_for
 from flask import render_template
 
 from models import Post, Tag
-from app import app, db
+from app import db
 
 from .forms import PostForm
 
 
+posts = Blueprint('posts', __name__, template_folder='templates')
+# the name 'posts' will be used in url_for function 
+# For instance, posts.index or posts.post_detail
 
-@app.route('/search')
+
+@posts.route('/search')
 def search():
     q = request.args.get('q')
     if q:
@@ -18,13 +24,6 @@ def search():
         posts = Post.query.all()
     
     return render_template('posts/index.html', posts=posts)
-
-
-
-posts = Blueprint('posts', __name__, template_folder='templates')
-# the name 'posts' will be used in url_for function 
-# For instance, posts.index or posts.post_detail
-
 
 
 # Must be above than `index` because it will cosnider `create` as `q` parameter
@@ -38,18 +37,20 @@ def create_post():
         try:
             post = Post(title=title, body=body)
             db.session.add(post)
-            db.commit()
+            db.session.commit()
         except Exception as e:
-            print(e)           
+            print('Error:', e)           
+
+        return redirect(url_for('posts.index'))
 
 
     form = PostForm()
     return render_template('posts/create_post.html', form=form)
 
 
-@posts.route('/search')
+@posts.route('/')
 def index():
-    posts = Post.query.all()
+    posts = Post.query.all()[::-1]
     
     return render_template('posts/index.html', posts=posts)
 
