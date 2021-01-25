@@ -3,24 +3,9 @@ from flask import request
 from flask import render_template
 
 from models import Post, Tag
-from app import app
+from app import app, db
 
 from .forms import PostForm
-
-
-
-posts = Blueprint('posts', __name__, template_folder='templates')
-# the name 'posts' will be used in url_for function 
-# For instance, posts.index or posts.post_detail
-
-
-
-# Must be above than `index` because it will cosnider `create` as `q` parameter
-# http://localhost:5000/blog/create
-@posts.route('/create')
-def create_post():
-    form  = PostForm()
-    return render_template('posts/create_post.html', form=form)
 
 
 
@@ -33,6 +18,33 @@ def search():
         posts = Post.query.all()
     
     return render_template('posts/index.html', posts=posts)
+
+
+
+posts = Blueprint('posts', __name__, template_folder='templates')
+# the name 'posts' will be used in url_for function 
+# For instance, posts.index or posts.post_detail
+
+
+
+# Must be above than `index` because it will cosnider `create` as `q` parameter
+# http://localhost:5000/blog/create
+@posts.route('/create', methods=['POST','GET'])
+def create_post():
+    if request.method == 'POST':
+        title = request.form.get('title')
+        body = request.form.get('body')
+
+        try:
+            post = Post(title=title, body=body)
+            db.session.add(post)
+            db.commit()
+        except Exception as e:
+            print(e)           
+
+
+    form = PostForm()
+    return render_template('posts/create_post.html', form=form)
 
 
 @posts.route('/search')
