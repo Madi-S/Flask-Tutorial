@@ -71,7 +71,10 @@ def index():
 def post_detail(slug):
     # post not POST request but blog text
     post = Post.query.filter(Post.slug==slug).first()
-    tags = post.tags
+    try:
+        tags = post.tags
+    except AttributeError:
+        tags = []
 
     return render_template('posts/post_detail.html', post=post, tags=tags)
 

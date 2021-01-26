@@ -63,12 +63,12 @@ class Tag(db.Model):
 # For flask security
 
 roles_users = db.Table('roles_users',
-    db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
-    db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('role_id', db.Integer, db.ForeignKey('role.id'))
     )
 
 class User(db.Model, UserMixin):
-    id = db.Column(db.Integer(), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(110), unique=True)
     password = db.Column(db.String(600))
     name = db.Column(db.String(100))
@@ -83,7 +83,7 @@ class User(db.Model, UserMixin):
         return self.name
 
 class Role(db.Model, RoleMixin):
-    id = db.Column(db.Integer(), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True)
     description = db.Column(db.String(200))
 
@@ -92,3 +92,4 @@ class Role(db.Model, RoleMixin):
 
     def __str__(self):
         return self.name
+
