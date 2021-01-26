@@ -8,3 +8,5 @@ class Configuration(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:1234@localhost/test1'
     SECRET_KEY = 'MADI04'
+    SECURITY_PASSWORD_SALT = 'not None'
+    SECURITY_PASSWORD_HASH = 'sha512_crypt'

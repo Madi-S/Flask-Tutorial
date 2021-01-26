@@ -4,10 +4,13 @@ from flask import redirect
 from flask import url_for
 from flask import render_template
 
+from flask_security import login_required
+
 from models import Post, Tag
-from app import db
+from app import db, app
 
 from .forms import PostForm
+
 
 
 posts = Blueprint('posts', __name__, template_folder='templates')
@@ -19,6 +22,7 @@ posts = Blueprint('posts', __name__, template_folder='templates')
 # Must be above than `index` because it will cosnider `create` as `q` parameter
 # http://localhost:5000/blog/create
 @posts.route('/create', methods=['POST','GET'])
+@login_required
 def create_post():
     form = PostForm(meta={'csrf': False})
 
@@ -84,6 +88,7 @@ def tag_detail(slug):
 
 
 @posts.route('/<slug>/edit', methods=['POST', 'GET'])
+@login_required
 def edit_post(slug):
     post = Post.query.filter(Post.slug==slug).first()
 
@@ -96,3 +101,9 @@ def edit_post(slug):
 
     form = PostForm(obj=post)
     return render_template('posts/edit_post.html', form=form, post=post)
+
+
+
+@app.route('/')
+def home():
+    return redirect(url_for('posts.index'))
