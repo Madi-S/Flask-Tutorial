@@ -57,8 +57,7 @@ def index():
     else:
         page = 1
 
-    pages = posts.paginate(page=page, per_page=1)
-
+    pages = posts.paginate(page=page, per_page=5)
 
     return render_template('posts/index.html', pages=pages, q=q)
 
@@ -69,6 +68,7 @@ def post_detail(slug):
     # post not POST request but blog text
     post = Post.query.filter(Post.slug==slug).first()
     tags = post.tags
+
     return render_template('posts/post_detail.html', post=post, tags=tags)
 
 
@@ -76,5 +76,23 @@ def post_detail(slug):
 @posts.route('/tag/<slug>')
 def tag_detail(slug):
     tag = Tag.query.filter(Tag.slug==slug).first()
-    posts = tag.posts #.all()
+    posts = tag.posts 
+
     return render_template('posts/tag_detail.html',tag=tag, posts=posts)
+
+
+
+
+@posts.route('/<slug>/edit', methods=['POST', 'GET'])
+def edit_post(slug):
+    post = Post.query.filter(Post.slug==slug).first()
+
+    if request.method == 'POST':
+        form = PostForm(formdata=request.form, obj=post)
+        form.populate_obj(post)
+        db.session.commit()
+
+        return redirect(url_for('posts.post_detail', slug=post.slug))
+
+    form = PostForm(obj=post)
+    return render_template('posts/edit_post.html', form=form, post=post)

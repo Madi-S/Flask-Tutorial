@@ -13,7 +13,7 @@ post_tags = db.Table('post_tags',
 
 def generate_slug(s):
     pattern = r'[^\w+]'
-    return re.sub(pattern, '-', s).lower() + str(randint(1000, 9999))
+    return re.sub(pattern, '-', s).lower()[:50] + str(randint(1000, 9999))
     # return s.replace(' ','-')
 
 
@@ -33,6 +33,9 @@ class Post(db.Model):
     def __repr__(self):
         return f'<Post id: {self.id}, title: {self.title}>'
 
+    def __str__(self):
+        return self.title
+
 
 
 class Tag(db.Model):
@@ -46,6 +49,9 @@ class Tag(db.Model):
 
     def __repr__(self):
         return f'<Tag id: {self.id}, name: {self.name}>'
+
+    def __str__(self):
+        return self.name
 
 # t = Tag.query.first()
 # p1 = Post.query.filter(Post.id==1).first()
