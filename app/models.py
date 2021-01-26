@@ -11,11 +11,7 @@ post_tags = db.Table('post_tags',
     db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'))
  )
 
-
-def generate_slug(s):
-    pattern = r'[^\w+]'
-    return re.sub(pattern, '-', s).lower()[:50] + str(randint(1000, 9999))
-    # return s.replace(' ','-')
+pattern = r'[^\w+]'
 
 
 class Post(db.Model):
@@ -30,6 +26,10 @@ class Post(db.Model):
         self.slug = generate_slug(self.title)
 
     tags = db.relationship('Tag', secondary=post_tags, backref=db.backref('posts', lazy='dynamic'))
+
+    def generate_slug(self):
+        if self.title:
+            self.slug =  re.sub(pattern, '-', self.title).lower()[:50] + str(randint(1000, 9999))
 
     def __repr__(self):
         return f'<Post id: {self.id}, title: {self.title}>'
@@ -47,6 +47,10 @@ class Tag(db.Model):
     def __init__(self, *args, **kwargs):
         super(Tag, self).__init__(*args, **kwargs)
         self.slug = generate_slug(self.name)
+
+    def generate_slug(self):
+        if self.name:
+            self.slug =  re.sub(pattern, '-', self.name).lower()[:50] + str(randint(1000, 9999))
 
     def __repr__(self):
         return f'<Tag id: {self.id}, name: {self.name}>'

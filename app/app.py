@@ -37,6 +37,13 @@ class AdminMixin:
         return redirect(url_for('security.login', next=request.url))
 
 
+class BaseModelView(ModelView):
+    # if something is changed in post -> new slug must be generated
+    def on_model_change(self, form, model, is_created):
+        model.generate_slug()
+        return super(BaseModelView, self).on_model_change(form, model, is_created)
+        
+
 class AdminView(AdminMixin, ModelView):
     pass
 
@@ -45,10 +52,17 @@ class HomeAdminView(AdminMixin, AdminIndexView):
     pass
 
 
+class PostAdminView(AdminMixin, BaseModelView):
+    pass
+
+
+class TagAdminView(AdminMixin, BaseModelView):
+    pass
+
 
 admin = Admin(app, 'FlaskBlog', url='/blog', index_view=HomeAdminView(name='Home'))
-admin.add_view(AdminView(Post, db.session))
-admin.add_view(AdminView(Tag, db.session))
+admin.add_view(PostAdminView(Post, db.session))
+admin.add_view(TagAdminView(Tag, db.session))
 
 
 # For security:
