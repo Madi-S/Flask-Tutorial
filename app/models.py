@@ -23,7 +23,7 @@ class Post(db.Model):
 
     def __init__(self, *args, **kwargs):
         super(Post, self).__init__(*args, **kwargs)
-        self.slug = generate_slug(self.title)
+        self.generate_slug()
 
     tags = db.relationship('Tag', secondary=post_tags, backref=db.backref('posts', lazy='dynamic'))
 
@@ -46,7 +46,7 @@ class Tag(db.Model):
 
     def __init__(self, *args, **kwargs):
         super(Tag, self).__init__(*args, **kwargs)
-        self.slug = generate_slug(self.name)
+        self.generate_slug()
 
     def generate_slug(self):
         if self.name:

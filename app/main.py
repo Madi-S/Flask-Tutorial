@@ -1,5 +1,6 @@
 from app import app, db
 from posts.blueprint import posts
+from views import *
 from fill_db import fill_posts
 
 

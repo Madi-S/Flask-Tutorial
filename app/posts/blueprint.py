@@ -7,7 +7,7 @@ from flask import render_template
 from flask_security import login_required
 
 from models import Post, Tag
-from app import db, app
+from app import db
 
 from .forms import PostForm
 
@@ -27,7 +27,9 @@ def create_post():
     form = PostForm(meta={'csrf': False})
 
     if request.method == 'POST':
+        print('Got:', form)
         if form.validate_on_submit():
+            print('Validated')
             title = request.form.get('title')
             body = request.form.get('body')
 
@@ -70,11 +72,7 @@ def index():
 @posts.route('/<slug>')
 def post_detail(slug):
     # post not POST request but blog text
-    post = Post.query.filter(Post.slug==slug).first()
-    try:
-        tags = post.tags
-    except AttributeError:
-        tags = []
+    post = Post.query.filter(Post.slug==slug).first_or_404()
 
     return render_template('posts/post_detail.html', post=post, tags=tags)
 
@@ -82,7 +80,7 @@ def post_detail(slug):
 # slug for specific 'tags' -> e.g., http://localhost:5000/blog/tag/sports
 @posts.route('/tag/<slug>')
 def tag_detail(slug):
-    tag = Tag.query.filter(Tag.slug==slug).first()
+    tag = Tag.query.filter(Tag.slug==slug).first_or_404()
     posts = tag.posts 
 
     return render_template('posts/tag_detail.html',tag=tag, posts=posts)
@@ -93,7 +91,7 @@ def tag_detail(slug):
 @posts.route('/<slug>/edit', methods=['POST', 'GET'])
 @login_required
 def edit_post(slug):
-    post = Post.query.filter(Post.slug==slug).first()
+    post = Post.query.filter(Post.slug==slug).first_or_404()
 
     if request.method == 'POST':
         form = PostForm(formdata=request.form, obj=post)
@@ -107,6 +105,3 @@ def edit_post(slug):
 
 
 
-@app.route('/')
-def home():
-    return redirect(url_for('posts.index'))

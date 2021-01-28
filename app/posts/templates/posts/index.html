@@ -11,9 +11,12 @@
 {% set q='&q=%s' % q %}
 {% block content %}
     {% for post in pages.items %}
+
+    {% if post.slug %}
         <p><a href="{{ url_for('posts.post_detail', slug=post.slug) }}">
             {{ post.title }}
         </a></p>
+    {% endif %}
     {% endfor %}
 
     <nav aria-label="...">

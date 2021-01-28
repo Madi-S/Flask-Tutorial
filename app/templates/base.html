@@ -8,6 +8,7 @@
         {% endblock %} | Flask Application
     </title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     
@@ -33,7 +34,7 @@
               </li>
               
               <li>
-                <a href="#">Link</a>
+                <a href="/login">Login</a>
               </li>
               
             </ul>
@@ -51,6 +52,7 @@
               {% if current_user.has_role('Admin') %}
               <!-- <li><a href="{{ url_for('posts.create_post') }}">+ Post</a></li> -->
               <li><a href="/admin">Admin</a></li>
+              <li><a href="create">+ Post</a></li>
               {% endif %}
             </ul>
           </div><!-- /.navbar-collapse -->
