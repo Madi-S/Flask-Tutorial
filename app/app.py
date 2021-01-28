@@ -53,11 +53,11 @@ class HomeAdminView(AdminMixin, AdminIndexView):
 
 
 class PostAdminView(AdminMixin, BaseModelView):
-    pass
+    form_columns = ['title', 'body', 'tags']
 
 
 class TagAdminView(AdminMixin, BaseModelView):
-    pass
+    form_columns = ['name', 'posts']
 
 
 admin = Admin(app, 'FlaskBlog', url='/blog', index_view=HomeAdminView(name='Home'))
